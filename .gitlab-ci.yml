@@ -1,19 +1,25 @@
-stages:
+variables:
+    TESTNAME: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
+    
+    stages:
     - build
-    - test
+    - run
 
-build:
+build_docker_image:
     stage: build
     script:
-        - echo "Building"
-        - mkdir build
-        - touch build/info.txt
-    artifacts:
-        paths:
-            - build/
-
-test:
-    stage: test
+        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - docker build -t $TESTNAME .
+        - docker push $TESTNAME
+    tags:
+        - build
+run_docker_image:
+    stage: run
     script:
-        - echo "testing"
-        - test -f "build/info.txt"
+        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - docker pull $TESTNAME
+        - docker kill $(docker ps -q) || true
+        - docker rm $(docker ps -a q) || true
+        - docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
+    tags:
+        - run
