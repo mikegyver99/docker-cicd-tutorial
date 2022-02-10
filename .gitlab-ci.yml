@@ -1,7 +1,7 @@
 variables:
     TESTNAME: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
     
-    stages:
+stages:
     - build
     - run
 
