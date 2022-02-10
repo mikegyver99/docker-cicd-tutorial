@@ -20,6 +20,6 @@ run_docker_image:
         - docker pull $TESTNAME
         - docker kill $(docker ps -q) || true
         - docker rm $(docker ps -a q) || true
-        - docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
+        - docker run -dt -p 8080:80 --name mygitlabCICDContainer $TESTNAME
     tags:
         - run
