@@ -1,26 +1,40 @@
-# Add sudo for shell executor
 variables:
-    TESTNAME: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
-    
-stages:
-    - build
-    - run
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
+  REGISTRY: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial
 
-build_docker_image:
+stages:
+  - build
+  - test
+  - deploy
+
+
+build_project:
+    image: docker:latest
+    services: 
+      - docker:dind
     stage: build
     script:
         - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker build -t $TESTNAME .
-        - docker push $TESTNAME
-    tags:
-        - build
-run_docker_image:
-    stage: run
+        - docker build -t $REGISTRY .
+        - docker push $REGISTRY
+
+test_project:
+    image: docker:latest
+    services: 
+      - docker:dind    
+    stage: test
     script:
-        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - sudo docker pull $TESTNAME
-        - sudo docker kill $(docker ps -q) || true
-        - sudo docker rm $(docker ps -a q) || true
-        - sudo docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
+        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - docker pull $REGISTRY
+        - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
+        
+deploy_project:
+    stage: deploy
+    script:
+        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - docker pull $REGISTRY
+        - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
+        - docker run --name=$BRANCH -p 80:8080 -dit $REGISTRY npm run start-server
     tags:
-        - run
+      - shell_executor
