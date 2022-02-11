@@ -1,7 +1,7 @@
 variables:
   WORK_DIR: ${CI_PROJECT_NAME}
   BRANCH: ${CI_COMMIT_REF_NAME}
-  REGISTRY: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial
+  REGISTRY: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
 
 stages:
   - build
