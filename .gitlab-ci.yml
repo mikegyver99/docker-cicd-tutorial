@@ -16,10 +16,10 @@ build_docker_image:
 run_docker_image:
     stage: run
     script:
-        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker pull $TESTNAME
-        - docker kill $(docker ps -q) || true
-        - docker rm $(docker ps -a q) || true
+        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - sudo docker pull $TESTNAME
+        - sudo docker kill $(docker ps -q) || true
+        - sudo docker rm $(docker ps -a q) || true
         - sudo docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
     tags:
         - run
