@@ -15,9 +15,9 @@ build_project:
       - docker:dind
     stage: build
     script:
-        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker build -t $REGISTRY .
-        - docker push $REGISTRY
+        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - sudo docker build -t $REGISTRY .
+        - sudo docker push $REGISTRY
 
 test_project:
     image: docker:latest
@@ -25,16 +25,16 @@ test_project:
       - docker:dind    
     stage: test
     script:
-        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker pull $REGISTRY
-        - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
+        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - sudo docker pull $REGISTRY
+        - sudo docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
         
 deploy_project:
     stage: deploy
     script:
-        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker pull $REGISTRY
-        - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
-        - docker run --name=$BRANCH -p 80:8080 -dit $REGISTRY npm run start-server
+        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - sudo docker pull $REGISTRY
+        - sudo docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
+        - sudo docker run --name=$BRANCH -p 80:8080 -dit $REGISTRY npm run start-server
     tags:
       - shell_executor
