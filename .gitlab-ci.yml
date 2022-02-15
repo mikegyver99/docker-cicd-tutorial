@@ -17,6 +17,8 @@ build_docker_image:
         - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
         - docker build -t $REGISTRY .
         - docker push $REGISTRY
+    tags:
+        - docker
 
 test_docker_image:
     stage: test
@@ -24,4 +26,5 @@ test_docker_image:
         - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
         - docker pull $REGISTRY
         - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
-        
+    tags:
+        - docker       
