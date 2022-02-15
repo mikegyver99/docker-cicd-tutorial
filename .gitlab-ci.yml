@@ -13,7 +13,7 @@ build_docker_image:
         - docker build -t $TESTNAME .
         - docker push $TESTNAME
     tags:
-        - build
+        - docker_executor
 run_docker_image:
     stage: run
     script:
@@ -23,4 +23,4 @@ run_docker_image:
         - sudo docker rm $(docker ps -a q) || true
         - sudo docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
     tags:
-        - run
+        - docker_executor
