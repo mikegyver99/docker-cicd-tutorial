@@ -18,7 +18,7 @@ build_docker_image:
         - docker build -t $REGISTRY .
         - docker push $REGISTRY
     tags:
-        - docker
+        - docker_executor
 
 test_docker_image:
     stage: test
@@ -27,4 +27,4 @@ test_docker_image:
         - docker pull $REGISTRY
         - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
     tags:
-        - docker       
+        - docker_executor       
