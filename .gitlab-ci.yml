@@ -1,26 +1,30 @@
-# Add sudo for shell executor
+image: docker:latest
+services:
+    - docker:dind
+
 variables:
-    TESTNAME: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
+    WORK_DIR: ${CI_PROJECT_NAME}
+    BRANCH: ${CI_COMMIT_REF_NAME}
+    REGISTRY: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial
     
 stages:
     - build
-    - run
+    - test
 
 build_docker_image:
     stage: build
     script:
         - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - docker build -t $TESTNAME .
-        - docker push $TESTNAME
+        - docker build -t $REGISTRY .
+        - docker push $REGISTRY
     tags:
         - docker_executor
 run_docker_image:
-    stage: run
+    stage: test
     script:
         - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
-        - sudo docker pull $TESTNAME
-        - sudo docker kill $(docker ps -q) || true
-        - sudo docker rm $(docker ps -a q) || true
-        - sudo docker run -dt -p 8080:80 --name gitlabCICDContainer $TESTNAME
+        - sudo docker pull $REGISTRY
+        - sudo docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
+        
     tags:
         - docker_executor
