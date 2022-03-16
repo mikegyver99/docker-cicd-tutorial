@@ -1,9 +1,18 @@
 stages:
-    - build
     - test
+    - infra_plan
+    - infra_deployment
+    - app_tasks
 
-build:
-    stage: build
+.ansible_prep:
+    script:
+        - echo "Prep"
+
+
+dev_infra_plan:
+    extends: .ansible_prep
+    stage: infra_plan
+    needs: []
     script:
         - echo "Building"
         - mkdir build
@@ -11,10 +20,25 @@ build:
     artifacts:
         paths:
             - build/
+    tags:
+        - shell
+    only:
+        - main
+    except:
+        - pipelines
+    when:    manual
 
-test:
-    stage: test
+.dev_infra_deployment:
+    extends: .ansible_prep
+    needs: ['dev_infra_plan']
+    stage: infra_deployment
     script:
         - echo "testing"
         - test -f "build/info.txt"
-
+    tags:
+        - shell
+    only:
+        - main
+    except:
+        - pipelines
+    when:    manual
