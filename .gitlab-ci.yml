@@ -28,7 +28,7 @@ dev_infra_plan:
         - pipelines
     when:    manual
 
-.dev_infra_deployment:
+dev_infra_deployment:
     extends: .ansible_prep
     needs: ['dev_infra_plan']
     stage: infra_deployment
