@@ -5,7 +5,7 @@ stages:
     - app_tasks
 
 .ansible_prep:
-    before_script:
+    script:
         - echo "Prep"
 
 
