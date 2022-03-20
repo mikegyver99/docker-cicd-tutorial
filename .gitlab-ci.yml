@@ -37,7 +37,5 @@ dev_infra_deployment:
     tags:
         - shell
     only:
-        - main
-    except:
-        - pipelines
-    when:    manual
+      refs:
+        - schedules
