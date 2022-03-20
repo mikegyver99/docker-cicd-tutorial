@@ -23,10 +23,10 @@ dev_infra_plan:
     tags:
         - shell
     rules:
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == "mikegarcia3"'
         when: manual
         allow_failure: true
-      - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "mikegarcia3"'
 
 
 dev_infra_deployment:
@@ -37,11 +37,11 @@ dev_infra_deployment:
         - echo "testing testing"
         - test -f "build/info.txt"
     tags:
-        - shell
+        - shell 
     rules:
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH == "mikegarcia3"'
         when: manual
         allow_failure: true
-      - if: '$CI_PIPELINE_SOURCE == "schedule"'
+      - if: '$CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == "mikegarcia3"'
         when: delayed
         start_in: 2 minutes
