@@ -6,7 +6,7 @@ stages:
 
 .ansible_prep:
     before_script:
-        - echo "Prep"
+        - echo "Preping"
 
 
 dev_infra_plan:
