@@ -34,7 +34,7 @@ dev_infra_deployment:
     needs: ['dev_infra_plan']
     stage: infra_deployment
     script:
-        - echo "testing and foobar testing"
+        - echo "testing testing"
         - test -f "build/info.txt"
     tags:
         - shell
