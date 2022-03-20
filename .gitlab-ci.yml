@@ -24,7 +24,6 @@ dev_infra_plan:
         - shell
     only:
       refs:
-        - manual
         - schedules
     except:
       - pipelines
@@ -42,7 +41,6 @@ dev_infra_deployment:
     only:
       refs:
         - schedules
-        - main
     when: delayed
     start_in: 2 minutes
     except:
