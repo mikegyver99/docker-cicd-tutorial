@@ -24,8 +24,7 @@ dev_infra_plan:
         - shell
     only:
       refs:
-      - main
-      - schedules
+        - schedules
 
 
 dev_infra_deployment:
