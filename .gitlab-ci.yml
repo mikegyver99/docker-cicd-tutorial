@@ -26,7 +26,6 @@ dev_infra_plan:
         - main
     except:
         - pipelines
-    when:    manual
 
 dev_infra_deployment:
     extends: .ansible_prep
