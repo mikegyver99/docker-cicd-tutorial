@@ -39,3 +39,4 @@ dev_infra_deployment:
     only:
       refs:
         - schedules
+    start_in: 2 minutes
