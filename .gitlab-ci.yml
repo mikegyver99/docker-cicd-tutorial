@@ -1,6 +1,6 @@
 # Add sudo for shell executor
 variables:
-    TESTNAME: registry.gitlab.com/maltodextrin99/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
+    TESTNAME: registry.gitlab.com/mikegyvergarcia/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
     
 stages:
     - build
@@ -9,7 +9,7 @@ stages:
 build_docker_image:
     stage: build
     script:
-        - docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - docker login -u $username -p $runnerPass registry.gitlab.com
         - docker build -t $TESTNAME .
         - docker push $TESTNAME
     tags:
@@ -17,7 +17,7 @@ build_docker_image:
 run_docker_image:
     stage: run
     script:
-        - sudo docker login -u maltodextrin99 -p $runnerPass registry.gitlab.com
+        - sudo docker login -u $username -p $runnerPass registry.gitlab.com
         - sudo docker pull $TESTNAME
         - sudo docker kill $(docker ps -q) || true
         - sudo docker rm $(docker ps -a q) || true
